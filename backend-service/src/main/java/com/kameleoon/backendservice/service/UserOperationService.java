@@ -5,6 +5,7 @@ import com.kameleoon.backendservice.entity.User;
 import com.kameleoon.backendservice.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,10 +15,13 @@ public class UserOperationService implements UserService {
 
     private final ModelMapper mapper;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    public UserOperationService(UserRepository userRepository, ModelMapper mapper) {
+    public UserOperationService(UserRepository userRepository, ModelMapper mapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.mapper = mapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -28,6 +32,7 @@ public class UserOperationService implements UserService {
 
     @Override
     public UserDto newUser(UserDto userDto) {
+        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         User savedUser = userRepository.save(mapper.map(userDto, User.class));
         return mapper.map(savedUser, UserDto.class);
     }
