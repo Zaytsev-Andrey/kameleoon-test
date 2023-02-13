@@ -1,6 +1,7 @@
 package com.kameleoon.backendservice.entity;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -15,6 +16,11 @@ public class Voting {
 
     @Column(nullable = false)
     protected byte vote;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "creation_date", updatable = false)
+    @org.hibernate.annotations.CreationTimestamp
+    protected Date creationDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -33,9 +39,10 @@ public class Voting {
         this.quote = quote;
     }
 
-    public Voting(Long id, byte vote, User user, Quote quote) {
+    public Voting(Long id, byte vote, Date creationDate, User user, Quote quote) {
         this.id = id;
         this.vote = vote;
+        this.creationDate = creationDate;
         this.user = user;
         this.quote = quote;
     }
@@ -44,8 +51,12 @@ public class Voting {
         return id;
     }
 
-    public byte isVote() {
+    public byte getVote() {
         return vote;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
     }
 
     public User getUser() {

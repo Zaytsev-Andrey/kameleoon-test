@@ -1,12 +1,14 @@
 package com.kameleoon.backendservice.service;
 
 import com.kameleoon.backendservice.dto.QuoteDto;
+import com.kameleoon.backendservice.dto.VotesPerDayDto;
 import com.kameleoon.backendservice.entity.Quote;
 import com.kameleoon.backendservice.entity.Voting;
 import com.kameleoon.backendservice.repository.QuoteRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,16 +30,20 @@ public class QuoteOperationService implements QuoteService {
 
     private final VotingService votingService;
 
+    private final VotesPerDayService votesPerDayService;
+
     private final ModelMapper mapper;
 
     @Autowired
     public QuoteOperationService(QuoteRepository quoteRepository, UserService userService,
                                  QuoteWithVotingService quoteWithVotingService,
-                                 VotingService votingService, ModelMapper mapper) {
+                                 VotingService votingService, VotesPerDayService votesPerDayService,
+                                 ModelMapper mapper) {
         this.quoteRepository = quoteRepository;
         this.userService = userService;
         this.quoteWithVotingService = quoteWithVotingService;
         this.votingService = votingService;
+        this.votesPerDayService = votesPerDayService;
         this.mapper = mapper;
     }
 
@@ -67,6 +73,13 @@ public class QuoteOperationService implements QuoteService {
     }
 
     @Override
+    public List<VotesPerDayDto> getGraphOfEvolutionForQuote(Long id) {
+        return votesPerDayService.getGraphOfEvolutionForQuote(id).stream()
+                .map(v -> mapper.map(v, VotesPerDayDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public QuoteDto newQuote(QuoteDto quoteDto, Long userId) {
         Quote quote = mapper.map(quoteDto, Quote.class);
         quote.setUser(userService.getPersistUser(userId));
@@ -75,6 +88,7 @@ public class QuoteOperationService implements QuoteService {
     }
 
     @Override
+    @Transactional
     public QuoteDto updateQuote(QuoteDto quoteDto) {
         Quote quote = quoteRepository.findById(quoteDto.getId())
                 .orElseThrow(() -> new NullPointerException(String.format("Quote with id='%d' notfound", quoteDto.getId())));

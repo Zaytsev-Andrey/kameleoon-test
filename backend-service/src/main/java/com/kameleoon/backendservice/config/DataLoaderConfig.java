@@ -37,11 +37,11 @@ public class DataLoaderConfig {
     @Bean
     public ApplicationRunner dataLoader() {
         return args -> {
-            User aganDalton = new User(null, "Agan Dalton", "agan.dalton@gmail.com", "Pa$$word", null);
-            User barnesBlake = new User(null, "Barnes Blake", "barnes.blake@gmail.com", "Pa$$word", null);
-            User castoRyan = new User(null, "Casto Ryan", "casto.ryan@gmail.com", "Pa$$word", null);
-            User durenPaige = new User(null, "Duren Paige", "duren.paige@gmail.com", "Pa$$word", null);
-            User frankHailee = new User(null, "Frank Hailee", "frank.hailee@gmail.com", "Pa$$word", null);
+            User aganDalton = new User(null, "Agan Dalton", "agan.dalton@gmail.com", "$2a$12$AP9TH9wmtN37l4ulARc.Z..FpxoWiKSdxSgl47HZXXJRpyWerqqC2", null);
+            User barnesBlake = new User(null, "Barnes Blake", "barnes.blake@gmail.com", "$2a$12$AP9TH9wmtN37l4ulARc.Z..FpxoWiKSdxSgl47HZXXJRpyWerqqC2", null);
+            User castoRyan = new User(null, "Casto Ryan", "casto.ryan@gmail.com", "$2a$12$AP9TH9wmtN37l4ulARc.Z..FpxoWiKSdxSgl47HZXXJRpyWerqqC2", null);
+            User durenPaige = new User(null, "Duren Paige", "duren.paige@gmail.com", "$2a$12$AP9TH9wmtN37l4ulARc.Z..FpxoWiKSdxSgl47HZXXJRpyWerqqC2", null);
+            User frankHailee = new User(null, "Frank Hailee", "frank.hailee@gmail.com", "$2a$12$AP9TH9wmtN37l4ulARc.Z..FpxoWiKSdxSgl47HZXXJRpyWerqqC2", null);
             userRepository.saveAll(Arrays.asList(aganDalton, barnesBlake, castoRyan, durenPaige, frankHailee));
 
             Quote aganDaltonFromOscarWilde = new Quote(null, "Be yourself; everyone else is already taken.", null, aganDalton, null);
